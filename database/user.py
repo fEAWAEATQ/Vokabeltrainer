@@ -50,3 +50,22 @@ def add_user(username,password,rank=0):#Adds a user to the users Database if the
         print(f"User {username} already exists")
 
 
+def get_all_users(): #Returns all users from the users Database
+    with get_connection() as conn:
+        return conn.execute("SELECT * FROM users").fetchall()
+    
+def delete_user(username) ->bool:#Deletes the selected user, returns true if successful else false
+    with get_connection() as conn:
+        cur= conn.execute('DELETE FROM users WHERE username=?',(username,))
+        return cur.rowcount>0 #Returns true if at least one row was deleted
+    
+def alter_rank(username: str, new_rank: int) -> bool:# Alters the rank of the selected user, returns true if successful else false
+    if not isinstance(new_rank, int):
+        raise TypeError("new_rank must be an int")
+    with get_connection() as conn:
+        cur = conn.execute('UPDATE users SET rank=? WHERE username=?', (new_rank, username))
+        return cur.rowcount > 0
+
+
+#def alter_password()
+#def alter_username()
