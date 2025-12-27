@@ -1,11 +1,15 @@
 import sqlite3
+from pathlib import Path
 from werkzeug.security import generate_password_hash
-DB_Users="Users.db"
+
+# use a module-relative path so the DB file is always next to this module
+USERS_DB = Path(__file__).parent / "Users.db"
+
 def get_connection():# Returns the connection to the User Database in sqlite3 Row format.
-    conn = sqlite3.connect(DB_Users)
+    conn = sqlite3.connect(str(USERS_DB))
     conn.row_factory = sqlite3.Row
     return conn
-def Create_DB_Users(): # Creats the Database for the Useraccount
+def create_db_users(): # Creats the Database for the Useraccount
     try:
         conn=get_connection()
         cursor=conn.cursor()
@@ -22,28 +26,25 @@ def Create_DB_Users(): # Creats the Database for the Useraccount
         cursor.close()
         conn.close()
 
-def Initialize_All_Databases(): #This functions initializes all Databases
-    Create_DB_Users()
+def initialize_all_databases(): #This functions initializes all Databases
+    create_db_users()
     #All further Databasis will be written there
 
-def Get_User(username): #Returns all Data from the user with the fitting username
+def get_user(username): #Returns all Data from the user with the fitting username
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM users WHERE username=?',(username,))
         return cursor.fetchone()
-def Create_User(username,password,rank=0): #Inserts a new user into the uses Database
+def create_user(username,password,rank=0): #Inserts a new user into the uses Database
     pw_hash = generate_password_hash(password)
-    try:
-        with get_connection() as conn:
-            cursor=conn.cursor()
-            cursor.execute('''INSERT INTO users (username,password,rank) VALUES (?,?,?)''',(username,pw_hash,rank))
-            conn.commit()
-    except sqlite3.IntegrityError:
-        print(f"User {username} already exists")
+    with get_connection() as conn:
+        cursor=conn.cursor()
+        cursor.execute('''INSERT INTO users (username,password,rank) VALUES (?,?,?)''',(username,pw_hash,rank))
+        conn.commit()
 
-def Add_User(username,password,rank=0): #Checks if the user exists if not calls the Creat_User function
+def add_user(username,password,rank=0):#Adds a user to the users Database if the user does not exists yet
     try:
-        Create_User(username, password, rank)
+        create_user(username, password, rank)
         print(f"User {username} created")
     except sqlite3.IntegrityError:
         print(f"User {username} already exists")
