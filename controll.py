@@ -1,6 +1,6 @@
 import flask 
 from routes.auth import auth_routes
-from database.user import initialize_all_databases
+from database.user import initialize_all_databases, add_user,alter_user_password,alter_user_username
 
 
 app = flask.Flask(__name__)
