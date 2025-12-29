@@ -26,9 +26,9 @@ def create_db_users(): # Creats the Database for the Useraccount
         cursor.close()
         conn.close()
 
-def initialize_all_databases(): #This functions initializes all Databases
+def initialize_database_users(): #This functions initializes the User Database
     create_db_users()
-    #All further Databasis will be written there
+    
 
 def get_user(username): #Returns all Data from the user with the fitting username
     with get_connection() as conn:
