@@ -2,32 +2,12 @@ import sqlite3
 from pathlib import Path
 from werkzeug.security import generate_password_hash
 
-# use a module-relative path so the DB file is always next to this module
-USERS_DB = Path(__file__).parent / "Users.db"
+
 
 def get_connection():# Returns the connection to the User Database in sqlite3 Row format.
     conn = sqlite3.connect(str(USERS_DB))
     conn.row_factory = sqlite3.Row
     return conn
-def create_db_users(): # Creats the Database for the Useraccount
-    try:
-        conn=get_connection()
-        cursor=conn.cursor()
-        cursor.execute('''CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            rank INTEGER DEFAULT 0
-        )''')
-        conn.commit()
-    except sqlite3.Error as e:
-        print(f"Databaseerror:{e}")
-    finally:
-        cursor.close()
-        conn.close()
-
-def initialize_database_users(): #This functions initializes the User Database
-    create_db_users()
     
 
 def get_user(username): #Returns all Data from the user with the fitting username
