@@ -9,11 +9,11 @@ class Vocabulary(db.Model):
     word_synonyms = db.Column(db.String(200), nullable=True)# Synonyms of the native word
     word_tips = db.Column(db.String(200), nullable=True)# Tips for learning the word
     example_sentence = db.Column(db.String(300), nullable=True)# Example sentence using the foreign word
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to User
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)  # Foreign key to User
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)# Primary Key
     username = db.Column(db.String(80), unique=True, nullable=False)# Username
     password = db.Column(db.String(200), nullable=False)# Hashed Password
     rank = db.Column(db.Integer, nullable=False, default=0)# User rank for permissions
-    vocabularies = db.relationship('Vocabulary', backref='user', lazy=True)  # Relationship to Vocabulary
+    vocabularies = db.relationship('Vocabulary', backref='user', cascade='all, delete-orphan',passive_deletes=True)  # Relationship to Vocabulary
