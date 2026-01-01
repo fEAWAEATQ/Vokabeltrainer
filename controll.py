@@ -1,19 +1,21 @@
-import flask
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from routes.auth import auth_routes
-
-
-
-
-app = flask.Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///vocab.db" #Database URI for SQLAlchemy 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db" #Database URI for SQLAlchemy
+from database.db import db
+from database.user import add_user, get_all_users, alter_user_password, alter_user_rank, delete_user, alter_user_username, get_user_id, get_user_lessons
+from database.lesson import add_lesson, delete_lesson,get_all_lessons
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db=SQLAlchemy(app)#Initialize SQLAlchemy with Flask app
+db.init_app(app)
 app.register_blueprint(auth_routes)#Registration of auth routes blueprint
 
 if __name__ == '__main__':
     
     with app.app_context():
-        db.create_all()#Create all tables in the database if they do not exist yet
-    app.run()
+        db.create_all()  # Create tables for all models
+        for user in get_all_users():
+            print(f"User: {user.username}, Rank: {user.rank}, ID: {user.id}")
+        for lesson in get_all_lessons():
+            print(f"Lesson: {lesson.lesson_name}, User ID: {lesson.user_id}, ID: {lesson.id}")
+        app.run()

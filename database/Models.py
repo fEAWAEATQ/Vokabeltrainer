@@ -1,19 +1,26 @@
-from controll import db
+from database.db import db
+from sqlalchemy import CheckConstraint
+
 
 class Vocabulary(db.Model):
-    __table_args__=(CheckConstraint('vocab_phase >=0 AND vocab_phase <= 6', name='check_vocab_phase'),db.UniqueConstraint('word_foreign', 'user_id', name='unique_word_user'))#Ensure vocab_phase is between 0 and 6
+    __tablename__ = 'vocabulary'
+    __table_args__=(CheckConstraint('vocab_phase >=0 AND vocab_phase <= 6', name='check_vocab_phase'),db.UniqueConstraint('word_foreign', 'lesson_id', name='unique_word_per_lesson'))#Ensure vocab_phase is between 0 and 6 and word_foreign is unique per lesson
     id = db.Column(db.Integer, primary_key=True)# Primary Key
     vocab_phase=db.Column(db.Integer,nullable=False,default=0)#Phase of the vocabulary word in the learning process default 0
-    word_foreign = db.Column(db.String(100), unique=True, nullable=False)# Foreign word
+    word_foreign = db.Column(db.String(100), nullable=False)# Foreign word
     word_native = db.Column(db.String(200), nullable=False)# Native word
-    word_synonyms = db.Column(db.String(200), nullable=True)# Synonyms of the native word
-    word_tips = db.Column(db.String(200), nullable=True)# Tips for learning the word
-    example_sentence = db.Column(db.String(300), nullable=True)# Example sentence using the foreign word
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)  # Foreign key to User
-
+    lesson_id=db.Column(db.Integer,db.ForeignKey('lesson.id',ondelete='CASCADE'),nullable=False)#Foreign key for Lession
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)# Primary Key
     username = db.Column(db.String(80), unique=True, nullable=False)# Username
     password = db.Column(db.String(200), nullable=False)# Hashed Password
     rank = db.Column(db.Integer, nullable=False, default=0)# User rank for permissions
-    vocabularies = db.relationship('Vocabulary', backref='user', cascade='all, delete-orphan',passive_deletes=True)  # Relationship to Vocabulary
+    lessons = db.relationship('Lesson', backref='user', cascade='all, delete-orphan',passive_deletes=True)  # Relationship to Lessons
+class Lesson(db.Model):
+    __tablename__ = 'lesson'
+    id=db.Column(db.Integer,primary_key=True)#Primay Key
+    lesson_name=db.Column(db.String(80),nullable=False)#Lession name
+    vocabularies = db.relationship('Vocabulary', backref='lesson', cascade='all, delete-orphan',passive_deletes=True)#Relationship to Vocabulary
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)  # Foreign key to User
+    
