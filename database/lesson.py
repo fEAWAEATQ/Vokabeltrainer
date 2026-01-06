@@ -1,6 +1,6 @@
 from sqlalchemy.exc import IntegrityError 
-from database.models import Lesson
-from database.models import Vocabulary
+from database.Models import Lesson
+from database.Models import Vocabulary
 from database.db import db
 from database.user import get_user_id
 def get_lesson(lesson_name,username): #Returns all Data from the Lesson with the fitting lesson_name
@@ -40,4 +40,8 @@ def delete_lesson(lesson_name,username) ->bool:#Deletes the selected lesson, ret
     except SQLAlchemyError:
         db.session.rollback()
         return False
-
+def get_vocabularies_of_lesson(lesson_name,username): #Returns all vocabularies of a lesson for the selected user
+    lesson=get_lesson(lesson_name,username)
+    if lesson:
+        return lesson.vocabularies
+    return []

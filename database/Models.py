@@ -22,5 +22,5 @@ class Lesson(db.Model):
     id=db.Column(db.Integer,primary_key=True)#Primay Key
     lesson_name=db.Column(db.String(80),nullable=False)#Lession name
     vocabularies = db.relationship('Vocabulary', backref='lesson', cascade='all, delete-orphan',passive_deletes=True)#Relationship to Vocabulary
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)  # Foreign key to User
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False,unique=True)  # Foreign key to User
     

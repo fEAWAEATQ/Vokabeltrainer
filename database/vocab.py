@@ -1,5 +1,5 @@
 from sqlalchemy.exc import IntegrityError 
-from database.models import Vocabulary
+from database.Models import Vocabulary
 from database.db import db
 from database.user import get_user_id
 from database.lesson import get_lesson_id
