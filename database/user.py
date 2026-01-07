@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash
-from sqlalchemy.exc import IntegrityError  
-from database.Models import User
+from sqlalchemy.exc import IntegrityError , SQLAlchemyError
+from database.models import User
 from database.db import db
 
 def get_user(username): #Returns all Data from the user with the fitting username
@@ -25,72 +25,67 @@ def create_user(username,password,rank=0): #Inserts a new user into the uses Dat
 def add_user(username,password,rank=0):#Adds a user to the users Database if the user does not exists yet
     user=create_user(username,password,rank)
     if user:
-        print(f"User {username} created successfully.")
-        return True
+        return user
     else:
-        print(f"User {username} already exists.")
-        return False
+        return None
 
 
 def get_all_users(): #Returns all users from the users Database
     return User.query.all()
     
-def delete_user(username) ->bool:#Deletes the selected user, returns true if successful else false
+def delete_user(username):#Deletes the selected user
     user=get_user(username)
     if user is None:
-        print(f"User {username} does not exist.")
-        return False
+        return None
     try:
         db.session.delete(user)
         db.session.commit()
-        return True
+        return user
     except SQLAlchemyError:
         db.session.rollback()
-        return False
+        return None
     
-def alter_user_rank(username: str, new_rank: int) -> bool:# Alters the rank of the selected user, returns true if successful else false
+def alter_user_rank(username: str, new_rank: int):# Alters the rank of the selected user
     if not isinstance(new_rank, int):
         raise TypeError("new_rank must be an int")
     user= get_user(username)
     if user is None:
-        return False
+        return None
     try:
         user.rank=new_rank
         db.session.commit()
-        return True
+        return user
     except SQLAlchemyError:
         db.session.rollback()
-        return False
+        return None
     
 
-
-def alter_user_password(username, new_password) -> bool:# Alters the password of the selected user, returns true if successful else false
+def alter_user_password(username, new_password):# Alters the password of the selected user
     pw_hash = generate_password_hash(new_password)
     user=get_user(username)
     if user is None:
-        return False
+        return None
     try:
         user.password=pw_hash
         db.session.commit()
-        return True
+        return user
     except SQLAlchemyError:
         db.session.rollback()
-        return False
+        return None
     
 
 
-
-def alter_user_username(username, new_username)-> bool:# Alters the username of the selected user, returns true if successful else false
+def alter_user_username(username, new_username):# Alters the username of the selected user
     user=get_user(username)
     if user is None:
-        return False
+        return None
     try:
         user.username=new_username
         db.session.commit()
-        return True
+        return user
     except SQLAlchemyError:
         db.session.rollback()
-        return False
+        return None
 
 def get_user_lessons(username): #Returns all lessons from the selected user
     user=get_user(username)

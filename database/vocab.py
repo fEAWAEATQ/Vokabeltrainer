@@ -1,5 +1,5 @@
-from sqlalchemy.exc import IntegrityError 
-from database.Models import Vocabulary
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from database.models import Vocabulary
 from database.db import db
 from database.user import get_user_id
 from database.lesson import get_lesson_id
@@ -18,23 +18,21 @@ def create_vocab(word_foreign,word_native,username,lesson_name): #Inserts a new 
 def add_vocab(word_foreign,word_native,username,lesson_name):#Adds a vocabulary word to the vocabulary Database if the word does not exists yet
     vocab=create_vocab(word_foreign,word_native,username,lesson_name)
     if vocab:
-        print(f"Vocabulary word {word_foreign} created successfully.")
-        return True
+        return vocab
     else:
-        print(f"Vocabulary word {word_foreign} already exists. or user {username} does not exist.")
-        return False
+        return None
 def get_all_vocab(): #Returns all vocabulary words from the vocabulary Database
     return Vocabulary.query.all()
 
-def delete_vocab(word_foreign,username,lesson_name) ->bool:#Deletes the selected vocabulary word, returns true if successful else false
+def delete_vocab(word_foreign,username,lesson_name):#Deletes the selected vocabulary word
     vocab=get_vocab(word_foreign,username,lesson_name)
     if vocab is None:
-        return False
+        return None
     try:
         db.session.delete(vocab)
         db.session.commit()
-        return True
+        return vocab
     except SQLAlchemyError:
         db.session.rollback()
-        return False
+        return None
 #alter vocabulary word phase

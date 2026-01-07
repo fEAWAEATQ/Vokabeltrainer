@@ -15,16 +15,4 @@ if __name__ == '__main__':
     
     with app.app_context():
         db.create_all()  # Create tables for all models
-        for vocab in get_vocabularies_of_lesson("Default Lesson","admin"):
-            print(f"Admin Vocab: {vocab.word_foreign} - {vocab.word_native}")
-
-        for lesson in get_user_lessons("admin"):
-            print(f"Admin Lesson: {lesson.lesson_name}")
-
-        for user in get_all_users():
-            print(f"User: {user.username}, Rank: {user.rank}, ID: {user.id}")
-        for lesson in get_all_lessons():
-            print(f"Lesson: {lesson.lesson_name}, User ID: {lesson.user_id}, ID: {lesson.id}")
-        for vocab in get_all_vocab():
-            print(f"Vocab: {vocab.word_foreign} - {vocab.word_native}, Phase: {vocab.vocab_phase}, Lesson ID: {vocab.lesson_id}, ID: {vocab.id},")
         app.run()
