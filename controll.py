@@ -20,4 +20,5 @@ if __name__ == '__main__':
         add_user("test", "testpassword")
         add_lesson("Basics", "test")
         add_vocab("House", "Haus", "test", "Basics")
+        add_vocab("Car", "Auto", "test", "Basics")
         app.run()

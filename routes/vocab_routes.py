@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import request, jsonify
 from database.vocab import set_phase
+from database.lesson import get_vocabularies_of_lesson
 vocab_routes = Blueprint('vocab_routes', __name__)  # Blueprint for vocab_routes
 
 @vocab_routes.route('/vocab/answer', methods=['POST'])
@@ -19,3 +20,12 @@ def answer_vocab():
         return jsonify({'error': 'Vocabulary word not found'}), 404
     return jsonify({"word_foreign": vocab.word_foreign, "new_phase": vocab.vocab_phase, "correct": correct}), 200
 
+@vocab_routes.route('/users/<username>/lessons/<lesson_name>/vocab', methods=['GET'])
+def get_lesson_vocab(username, lesson_name):
+    vocabularies = get_vocabularies_of_lesson(lesson_name, username)
+    return jsonify([{
+        "word_foreign": vocab.word_foreign,
+        "word_native": vocab.word_native,
+        "vocab_phase": vocab.vocab_phase
+    } for vocab in vocabularies]), 200
+    
