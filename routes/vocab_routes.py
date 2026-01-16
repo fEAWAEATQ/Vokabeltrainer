@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import request, jsonify
 from database.vocab import set_phase
-from database.lesson import get_vocabularies_of_lesson
+from database.lesson import get_vocabularies_of_lesson, add_lesson
 vocab_routes = Blueprint('vocab_routes', __name__)  # Blueprint for vocab_routes
 
 @vocab_routes.route('/vocab/answer', methods=['POST'])
@@ -28,4 +28,16 @@ def get_lesson_vocab(username, lesson_name):
         "word_native": vocab.word_native,
         "vocab_phase": vocab.vocab_phase
     } for vocab in vocabularies]), 200
-    
+
+@vocab_routes.route('/users/<username>/lessons', methods=['POST'])
+def create_lesson(username):
+    data= request.get_json()
+    if data is None:
+        return jsonify({'error': 'No input data provided'}), 400
+    lesson_name = data.get('lesson_name')
+    if not lesson_name:
+        return jsonify({'error': 'Invalid input'}), 400
+    lesson=add_lesson(lesson_name, username)
+    if lesson is None:
+        return jsonify({'error': 'Lesson could not be created'}), 400
+    return jsonify({"lesson_name": lesson.lesson_name, "user_id": lesson.user_id}), 201

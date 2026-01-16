@@ -21,4 +21,5 @@ if __name__ == '__main__':
         add_lesson("Basics", "test")
         add_vocab("House", "Haus", "test", "Basics")
         add_vocab("Car", "Auto", "test", "Basics")
+        delete_user("test34")
         app.run()
