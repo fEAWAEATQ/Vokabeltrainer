@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import request, jsonify
 from database.vocab import set_phase, add_vocab
 from database.lesson import get_vocabularies_of_lesson, add_lesson
-from database.user import add_user
+from database.user import add_user, get_user_lessons
 vocab_routes = Blueprint('vocab_routes', __name__)  # Blueprint for vocab_routes
 
 @vocab_routes.route('/vocab/answer', methods=['POST'])# Endpoint to answer a vocabulary question
@@ -74,3 +74,11 @@ def create_user():
     if user is None:
         return jsonify({'error': 'User already exists'}), 409
     return jsonify({"username": user.username, "rank": user.rank}), 201
+
+@vocab_routes.route('/users/<username>/lessons', methods=['GET'])# Get all lessons of a user
+def get_user_lessons_route(username):
+    lessons = get_user_lessons(username)
+    return jsonify([{
+        "lesson_name": lesson.lesson_name,
+        "user_id": lesson.user_id
+    } for lesson in lessons]), 200
