@@ -1,12 +1,12 @@
 from flask import Blueprint
 from flask import request, jsonify
-from database.vocab import set_phase, add_vocab
-from database.lesson import get_vocabularies_of_lesson, add_lesson
+from database.vocab import set_phase, add_vocab, delete_vocab
+from database.lesson import get_vocabularies_of_lesson, add_lesson, delete_lesson
 from database.user import add_user, get_user_lessons
 vocab_routes = Blueprint('vocab_routes', __name__)  # Blueprint for vocab_routes
 
 @vocab_routes.route('/vocab/answer', methods=['POST'])# Endpoint to answer a vocabulary question
-def answer_vocab():
+def answer_vocab_route():
     data = request.get_json()
     if not data:
         return jsonify({'error': 'No input data provided'}), 400
@@ -22,7 +22,7 @@ def answer_vocab():
     return jsonify({"word_foreign": vocab.word_foreign, "new_phase": vocab.vocab_phase, "correct": correct}), 200
 
 @vocab_routes.route('/users/<username>/lessons/<lesson_name>/vocab', methods=['GET'])# Get vocabularies of a lesson for a user
-def get_lesson_vocab(username, lesson_name):
+def get_lesson_vocab_route(username, lesson_name):
     vocabularies = get_vocabularies_of_lesson(lesson_name, username)
     return jsonify([{
         "word_foreign": vocab.word_foreign,
@@ -31,7 +31,7 @@ def get_lesson_vocab(username, lesson_name):
     } for vocab in vocabularies]), 200
 
 @vocab_routes.route('/users/<username>/lessons', methods=['POST'])# Create a new lesson for a user
-def create_lesson(username):
+def create_lesson_route(username):
     data= request.get_json()
     if data is None:
         return jsonify({'error': 'No input data provided'}), 400
@@ -44,7 +44,7 @@ def create_lesson(username):
     return jsonify({"lesson_name": lesson.lesson_name, "user_id": lesson.user_id}), 201
 
 @vocab_routes.route('/users/<username>/lessons/<lesson_name>/vocab', methods=['POST']) # Add vocabulary to a lesson
-def add_vocab_to_lesson(username, lesson_name):
+def add_vocab_to_lesson_route(username, lesson_name):
     data = request.get_json()
     if data is None:
         return jsonify({'error': 'No input data provided'}), 400
@@ -62,7 +62,7 @@ def add_vocab_to_lesson(username, lesson_name):
     }), 201
 
 @vocab_routes.route('/users',methods=['POST'])# Endpoint to create a new user
-def create_user():
+def create_user_route():
     data= request.get_json()
     if data is None:
         return jsonify({'error': 'No input data provided'}), 400
@@ -82,3 +82,18 @@ def get_user_lessons_route(username):
         "lesson_name": lesson.lesson_name,
         "user_id": lesson.user_id
     } for lesson in lessons]), 200
+
+@vocab_routes.route('/users/<username>/lessons/<lesson_name>', methods=['DELETE'])# Delete a lesson for a user
+def delete_lesson_route(username, lesson_name):
+    lesson=delete_lesson(lesson_name, username)
+    if lesson is None:
+        return jsonify({'error': 'Lesson not found'}), 404
+    return jsonify({"lesson_name": lesson.lesson_name, "user_id": lesson.user_id}), 200
+
+
+@vocab_routes.route('/users/<username>/lessons/<lesson_name>/vocab/<word_foreign>', methods=['DELETE'])# Delete a vocabulary word from a lesson
+def delete_vocab_route(username, lesson_name, word_foreign):
+    vocab=delete_vocab(word_foreign, username, lesson_name)
+    if vocab is None:
+        return jsonify({'error': 'Vocabulary word not found'}), 404
+    return jsonify({"word_foreign": vocab.word_foreign, "word_native": vocab.word_native}), 200
