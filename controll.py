@@ -16,6 +16,10 @@ if __name__ == '__main__':
     
     with app.app_context():
         db.create_all()  # Create tables for all models
+        add_user("admin", "adminpass", rank=10)  # Create a default admin user
+        add_user("user", "userpass", rank=1)  # Create a default regular user
+        add_lesson("Default Lesson", "admin")  # Create a default lesson for admin
+        add_vocab("Hallo", "Hello", "admin", "Default Lesson")  # Add default vocabulary
+        add_vocab("Tschüss", "Goodbye", "admin", "Default Lesson")  # Add default vocabulary
         
-        add_user("test", "testpassword")
         app.run()

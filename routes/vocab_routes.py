@@ -3,6 +3,7 @@ from flask import request, jsonify
 from database.vocab import set_phase, add_vocab, delete_vocab
 from database.lesson import get_vocabularies_of_lesson, add_lesson, delete_lesson
 from database.user import add_user, get_user_lessons
+from logic.vocab_stats import get_vocab_stats
 vocab_routes = Blueprint('vocab_routes', __name__)  # Blueprint for vocab_routes
 
 @vocab_routes.route('/vocab/answer', methods=['POST'])# Endpoint to answer a vocabulary question
@@ -97,3 +98,11 @@ def delete_vocab_route(username, lesson_name, word_foreign):
     if vocab is None:
         return jsonify({'error': 'Vocabulary word not found'}), 404
     return jsonify({"word_foreign": vocab.word_foreign, "word_native": vocab.word_native}), 200
+
+
+@vocab_routes.route('/users/<username>/stats', methods=['GET'])# Get user statistics
+def get_user_stats_route(username):
+    lessons = get_user_lessons(username)
+    vocabularys=[vocab for lesson in lessons for vocab in lesson.vocabularies]
+    stats = get_vocab_stats(vocabularys)
+    return jsonify(stats), 200
