@@ -21,5 +21,4 @@ if __name__ == '__main__':
         add_lesson("Default Lesson", "admin")  # Create a default lesson for admin
         add_vocab("Hallo", "Hello", "admin", "Default Lesson")  # Add default vocabulary
         add_vocab("Tschüss", "Goodbye", "admin", "Default Lesson")  # Add default vocabulary
-        
         app.run()
