@@ -7,6 +7,7 @@ from database.user import add_user, get_all_users, alter_user_password, alter_us
 from database.lesson import add_lesson, delete_lesson, get_vocabularies_of_lesson
 from database.vocab import add_vocab, delete_vocab, get_all_vocab
 app = Flask(__name__)
+app.secret_key = "dev-secret-key"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
