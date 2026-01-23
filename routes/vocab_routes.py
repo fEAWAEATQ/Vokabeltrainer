@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import request, jsonify
+from flask import request, jsonify, session
 from database.vocab import set_phase, add_vocab, delete_vocab
 from database.lesson import get_vocabularies_of_lesson, add_lesson, delete_lesson
 from database.user import add_user, get_user_lessons
@@ -8,6 +8,8 @@ vocab_routes = Blueprint('vocab_routes', __name__)  # Blueprint for vocab_routes
 
 @vocab_routes.route('/vocab/answer', methods=['POST'])# Endpoint to answer a vocabulary question
 def answer_vocab_route():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
     data = request.get_json()
     if not data:
         return jsonify({'error': 'No input data provided'}), 400
@@ -33,6 +35,8 @@ def get_lesson_vocab_route(username, lesson_name):
 
 @vocab_routes.route('/users/<username>/lessons', methods=['POST'])# Create a new lesson for a user
 def create_lesson_route(username):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
     data= request.get_json()
     if data is None:
         return jsonify({'error': 'No input data provided'}), 400
@@ -46,6 +50,8 @@ def create_lesson_route(username):
 
 @vocab_routes.route('/users/<username>/lessons/<lesson_name>/vocab', methods=['POST']) # Add vocabulary to a lesson
 def add_vocab_to_lesson_route(username, lesson_name):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
     data = request.get_json()
     if data is None:
         return jsonify({'error': 'No input data provided'}), 400
@@ -86,6 +92,8 @@ def get_user_lessons_route(username):
 
 @vocab_routes.route('/users/<username>/lessons/<lesson_name>', methods=['DELETE'])# Delete a lesson for a user
 def delete_lesson_route(username, lesson_name):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
     lesson=delete_lesson(lesson_name, username)
     if lesson is None:
         return jsonify({'error': 'Lesson not found'}), 404
@@ -94,6 +102,8 @@ def delete_lesson_route(username, lesson_name):
 
 @vocab_routes.route('/users/<username>/lessons/<lesson_name>/vocab/<word_foreign>', methods=['DELETE'])# Delete a vocabulary word from a lesson
 def delete_vocab_route(username, lesson_name, word_foreign):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
     vocab=delete_vocab(word_foreign, username, lesson_name)
     if vocab is None:
         return jsonify({'error': 'Vocabulary word not found'}), 404
