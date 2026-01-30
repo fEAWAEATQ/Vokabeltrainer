@@ -3,23 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from routes.auth import auth_routes
 from routes.vocab_routes import vocab_routes
 from database.db import db
-from database.user import add_user, get_all_users, alter_user_password, alter_user_rank, delete_user, alter_user_username, get_user_id, get_user_lessons
-from database.lesson import add_lesson, delete_lesson, get_vocabularies_of_lesson
-from database.vocab import add_vocab, delete_vocab, get_all_vocab
+import os
 app = Flask(__name__)
-app.secret_key = "dev-secret-key"
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 app.register_blueprint(auth_routes)#Registration of auth routes blueprint
 app.register_blueprint(vocab_routes)#Registration of vocab routes blueprint
-if __name__ == '__main__':
-    
-    with app.app_context():
-        db.create_all()  # Create tables for all models
-        add_user("admin", "adminpass", rank=10)  # Create a default admin user
-        add_user("user", "userpass", rank=1)  # Create a default regular user
-        add_lesson("Default Lesson", "admin")  # Create a default lesson for admin
-        add_vocab("Hallo", "Hello", "admin", "Default Lesson")  # Add default vocabulary
-        add_vocab("Tschüss", "Goodbye", "admin", "Default Lesson")  # Add default vocabulary
-        app.run()
+   
+with app.app_context():
+    db.create_all()  # Create tables for all models
