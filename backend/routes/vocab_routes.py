@@ -1,9 +1,9 @@
 from flask import Blueprint
 from flask import request, jsonify, session
-from database.vocab import set_phase, add_vocab, delete_vocab
-from database.lesson import get_vocabularies_of_lesson, add_lesson, delete_lesson
-from database.user import add_user, get_user_lessons
-from logic.vocab_stats import get_vocab_stats
+from backend.database.vocab import set_phase, add_vocab, delete_vocab
+from backend.database.lesson import get_vocabularies_of_lesson, add_lesson, delete_lesson
+from backend.database.user import add_user, get_user_lessons
+from backend.logic.vocab_stats import get_vocab_stats
 vocab_routes = Blueprint('vocab_routes', __name__)  # Blueprint for vocab_routes
 
 @vocab_routes.route('/vocab/answer', methods=['POST'])# Endpoint to answer a vocabulary question

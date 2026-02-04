@@ -1,11 +1,8 @@
 from flask import Blueprint, render_template, request, jsonify, session
-from database.user import get_user
+from backend.database.user import get_user
 from werkzeug.security import check_password_hash
 auth_routes=Blueprint('auth',__name__)#Blueprint for auth_routes
-@auth_routes.route('/')# Route to the Loginpage
-def index():
-    return render_template('system/Login.html')
-@auth_routes.route('/auth/login',methods=['POST'])
+@auth_routes.route('/login',methods=['POST'])
 def login():
     data=request.get_json()
     if data is None:
@@ -26,7 +23,7 @@ def login():
 
 
 
-@auth_routes.route('/auth/logout',methods=['POST'])
+@auth_routes.route('/logout',methods=['POST'])
 def logout():
     session.clear()
     return jsonify({'message':'logged out'}), 200

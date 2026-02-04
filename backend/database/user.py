@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import IntegrityError , SQLAlchemyError
-from database.models import User
-from database.db import db
+from backend.database.models import User
+from backend.database.db import db
 
 def get_user(username): #Returns all Data from the user with the fitting username
     return User.query.filter_by(username=username).first()

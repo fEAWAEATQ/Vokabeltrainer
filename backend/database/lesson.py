@@ -1,8 +1,8 @@
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from database.models import Lesson
-from database.models import Vocabulary
-from database.db import db
-from database.user import get_user_id
+from backend.database.models import Lesson
+from backend.database.models import Vocabulary
+from backend.database.db import db
+from backend.database.user import get_user_id
 def get_lesson(lesson_name,username): #Returns all Data from the Lesson with the fitting lesson_name
     return Lesson.query.filter_by(lesson_name=lesson_name,user_id=get_user_id(username)).first()
 def get_lesson_id(lesson_name,username): #Returns the id of the lesson with the fitting lesson_name
