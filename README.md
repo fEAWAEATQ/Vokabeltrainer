@@ -67,28 +67,6 @@ Tools – password hashing and security utilities
 
 Pytest – unit testing framework
 
-.
-├── controll.py              # Flask application entry point
-├── database/                # Database models and data access
-│   ├── db.py
-│   ├── models.py
-│   ├── user.py
-│   ├── lesson.py
-│   └── vocab.py
-├── logic/                   # Business logic (independent from Flask)
-│   ├── vocab_phase.py
-│   └── stats.py
-├── routes/                  # API routes (Flask Blueprints)
-│   ├── auth.py
-│   └── vocab_routes.py
-├── tests/                   # Unit tests for business logic
-│   ├── test_vocab_phases.py
-│   └── test_vocab_stats.py
-├── instance/
-│   └── app.db               # SQLite database (local)
-├── requirements.txt
-└── README.md
-
 
 🌐 API Overview
 
