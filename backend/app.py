@@ -17,7 +17,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 app.register_blueprint(auth_routes, url_prefix="/api/auth")#Registration of auth routes blueprint
 app.register_blueprint(vocab_routes, url_prefix="/api")#Registration of vocab routes blueprint
-
 def create_test_user():
     if not User.query.filter_by(username="test").first():
         user = User(

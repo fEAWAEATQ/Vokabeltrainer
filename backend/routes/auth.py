@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, session
+from flask import Blueprint, request, jsonify, session
 from backend.database.user import get_user
 from werkzeug.security import check_password_hash
 auth_routes=Blueprint('auth',__name__)#Blueprint for auth_routes
