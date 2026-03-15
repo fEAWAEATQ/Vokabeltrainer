@@ -1,7 +1,25 @@
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("App.js loaded");
-
+//Check if user is authenticated by calling /api/me, if not redirect to login page if so return user name.
+async function checkAuth() {
   const API_BASE_URL = window.location.origin;
+  const response = await fetch(`${API_BASE_URL}/api/me`, {
+    credentials: "include" //Include cookies for authentication
+  });
+  if (!response.ok) {
+    window.location.href = `${API_BASE_URL}/index.html`;//redirect to login if not authenticated
+    return null;
+}const user = await response.json();
+return user;
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("App.js loaded");
+  const API_BASE_URL = window.location.origin;
+ const usernamePlaceholder = document.getElementById("username-placeholder"); //Element in dashboard.html to display username and check if user is authenticated
+if (usernamePlaceholder) {
+  const user = await checkAuth();
+  if (!user) return;
+  usernamePlaceholder.textContent = user.username;
+}
 
   const form = document.getElementById("login-form"); //Login-Formular
   if (form) {
@@ -42,7 +60,8 @@ const password = document.getElementById("password").value;
 const response = await fetch(`${API_BASE_URL}/api/users`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ username, password })
+  body: JSON.stringify({ username, password }),
+  credentials: "include" //Include cookies for authentication
 });
 if (response.ok) {
   window.location.href = `${API_BASE_URL}/dashboard.html`;//redirect to dashboard after successful registration
@@ -51,4 +70,24 @@ if (response.ok) {
   }
  });
 }
+
+const logoutform = document.getElementById("logout-form"); //Logout-Formular
+if (logoutform) {
+  logoutform.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (response.ok) {
+      window.location.href = `${API_BASE_URL}/index.html`;//redirect to login after logout
+    } else {
+      alert("Logout failed");
+    }
+  });
+}
 });
+
+
+
+

@@ -8,9 +8,11 @@ from backend.database.user import User
 from werkzeug.security import generate_password_hash
 from dotenv import load_dotenv
 import time
+from flask_cors import CORS
 load_dotenv() 
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)  # Enable CORS with support for credentials
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

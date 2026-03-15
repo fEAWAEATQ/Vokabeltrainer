@@ -80,6 +80,8 @@ def create_user_route():
     user = add_user(username, password)
     if user is None:
         return jsonify({'error': 'User already exists'}), 409
+    session['user_id'] = user.id
+    session['username'] = user.username
     return jsonify({"username": user.username, "rank": user.rank}), 201
 
 @vocab_routes.route('/users/<username>/lessons', methods=['GET'])# Get all lessons of a user
@@ -116,3 +118,11 @@ def get_user_stats_route(username):
     vocabularys=[vocab for lesson in lessons for vocab in lesson.vocabularies]
     stats = get_vocab_stats(vocabularys)
     return jsonify(stats), 200
+
+
+@vocab_routes.route('/me', methods=['GET'])# Get current logged in user
+def get_current_user_route():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+    user_name = session.get('username')
+    return jsonify({'username': user_name}), 200
