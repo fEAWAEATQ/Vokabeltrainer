@@ -86,6 +86,25 @@ if (logoutform) {
     }
   });
 }
+
+const dashboardBtn = document.getElementById("dashboard-btn"); //Navigation buttons in dashboard.html
+if (dashboardBtn) {
+  dashboardBtn.addEventListener("click", () => {
+    window.location.href = `${API_BASE_URL}/dashboard.html`;
+  });
+}
+const statsBtn = document.getElementById("stats-btn");
+if (statsBtn) {
+  statsBtn.addEventListener("click", () => {
+    window.location.href = `${API_BASE_URL}/stats.html`;
+  });
+}
+const practiceBtn = document.getElementById("practice-btn");
+if (practiceBtn) { 
+   practiceBtn.addEventListener("click", () => {
+    window.location.href = `${API_BASE_URL}/practice.html`;
+  });
+}
 });
 
 
