@@ -5,7 +5,7 @@ async function checkAuth() {
     credentials: "include" //Include cookies for authentication
   });
   if (!response.ok) {
-    window.location.href = `${API_BASE_URL}/index.html`;//redirect to login if not authenticated
+    window.location.href = `${API_BASE_URL}/index`;//redirect to login if not authenticated
     return null;
 }const user = await response.json();
 return user;
@@ -33,7 +33,7 @@ if (usernamePlaceholder) {
       body: JSON.stringify({ username, password })
     });
     if (response.ok) {
-      window.location.href = `${API_BASE_URL}/dashboard.html`;
+      window.location.href = `${API_BASE_URL}/dashboard`;
     } else {
       alert("Login failed");
     }
@@ -42,13 +42,13 @@ if (usernamePlaceholder) {
   const registerButton = document.getElementById("register-button");//Register-Button
   if (registerButton) {
     registerButton.addEventListener("click", () => {
-      window.location.href = `${API_BASE_URL}/register.html`;
+      window.location.href = `${API_BASE_URL}/register`;
     });
   }
 const backToLoginButton = document.getElementById("back-to-login");//Button in Register.html to go back to Login.html
 if (backToLoginButton) {
   backToLoginButton.addEventListener("click", () => {
-    window.location.href = `${API_BASE_URL}/index.html`;
+    window.location.href = `${API_BASE_URL}/index`;
   });
 }
  const registerForm = document.getElementById("register-form"); //Register-Formular
@@ -64,7 +64,7 @@ const response = await fetch(`${API_BASE_URL}/api/users`, {
   credentials: "include" //Include cookies for authentication
 });
 if (response.ok) {
-  window.location.href = `${API_BASE_URL}/dashboard.html`;//redirect to dashboard after successful registration
+  window.location.href = `${API_BASE_URL}/dashboard`;//redirect to dashboard after successful registration
 } else {
   alert("Registration failed");
   }
@@ -80,7 +80,7 @@ if (logoutform) {
       headers: { "Content-Type": "application/json" }
     });
     if (response.ok) {
-      window.location.href = `${API_BASE_URL}/index.html`;//redirect to login after logout
+      window.location.href = `${API_BASE_URL}/index`;//redirect to login after logout
     } else {
       alert("Logout failed");
     }
@@ -90,19 +90,19 @@ if (logoutform) {
 const dashboardBtn = document.getElementById("dashboard-btn"); //Navigation buttons in dashboard.html
 if (dashboardBtn) {
   dashboardBtn.addEventListener("click", () => {
-    window.location.href = `${API_BASE_URL}/dashboard.html`;
+    window.location.href = `${API_BASE_URL}/dashboard`;
   });
 }
 const statsBtn = document.getElementById("stats-btn");
 if (statsBtn) {
   statsBtn.addEventListener("click", () => {
-    window.location.href = `${API_BASE_URL}/stats.html`;
+    window.location.href = `${API_BASE_URL}/stats`;
   });
 }
 const practiceBtn = document.getElementById("practice-btn");
 if (practiceBtn) { 
    practiceBtn.addEventListener("click", () => {
-    window.location.href = `${API_BASE_URL}/practice.html`;
+    window.location.href = `${API_BASE_URL}/practice`;
   });
 }
 });
