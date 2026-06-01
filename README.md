@@ -1,118 +1,182 @@
 # Vokabeltrainer
 
-A RESTful backend application for learning and managing vocabulary.
-The project supports users, lessons, vocabulary entries, learning phases, and statistics, and focuses on clean backend architecture, session-based authentication, and testable business logic.
+A full-stack vocabulary learning application built as a personal project for learning web development, backend architecture, authentication, database design, testing, containerization, and deployment.
+Primary focus of the project was backend development, API design, authentication, database integration, testing and deployment.
 
-The backend is designed API-first, follows a clear separation of concerns (routes, logic, database)
-Features
+The application allows users to manage lessons and vocabulary, practice words using a learning-phase system, and track learning statistics.
 
-(Frontend info)(dockeretc)
+## Live Demo
 
-👤 User management
+Frontend:
+https://vokabeltrainer-jcr8.onrender.com
 
-User registration
+Backend:
+https://vokabeltrainer-backend.onrender.com
 
-Session-based login and logout
+### Important Note
 
-Secure password hashing
+The application is hosted on Render's free tier.
 
-📚 Lessons
+After longer periods of inactivity, the backend service may enter sleep mode. Before using the application, open the backend URL once and wait until the service has fully started. Afterwards, the frontend can be used normally.
 
-Create and delete lessons per user
+This limitation is caused by the free hosting tier and is not related to the application itself.
 
-List all lessons of a user
+---
 
-📖 Vocabulary
+## Key Concepts
 
-Add and delete vocabulary entries per lesson
+* REST API Design
+* Session-based Authentication
+* PostgreSQL Database Integration
+* Docker Containerization
+* Full-Stack Deployment
+* Unit Testing
+* CRUD Operations
 
-Each vocabulary entry belongs to exactly one lesson and user
+---
 
-🔁 Learning phase system
+## Features
 
-Vocabulary entries progress through learning phases
+### User Management
 
-Correct answers increase the phase
+* User registration
+* Session-based authentication
+* Login and logout functionality
+* Secure password hashing using Werkzeug
 
-Incorrect answers trigger a defined fallback logic
+### Lesson Management
 
-📊 Statistics
+* Create lessons
+* Delete lessons
+* List all lessons belonging to a user
 
-Phase distribution overview
+### Vocabulary Management
 
-🔐 Security
+* Add vocabulary entries to lessons
+* Delete vocabulary entries
+* Store vocabulary per user and lesson
+* Import vocabulary entries from CSV files
+   for example: house,Haus
+                dog,Hund
 
-Write operations (POST / DELETE) are protected by login sessions
+### Learning System
 
-Read-only operations (GET) are publicly accessible by design
+* Vocabulary entries progress through learning phases
+* Correct answers increase the learning phase
+* Incorrect answers trigger a fallback mechanism
 
-🧪 Testing
+### Statistics
 
-Unit tests for core business logic (learning phases and statistics)
+* Learning phase distribution
+* Vocabulary learning statistics
 
+### Security
 
-🛠️ Tech Stack
+* Session-based authentication
+* Protected write operations (POST / DELETE)
+* Passwords stored as secure hashes
 
-Python 3
+### Testing
 
-Flask – web framework
+Unit tests for:
 
-Flask-SQLAlchemy – ORM and database integration
+* Learning phase progression logic
+* Statistics calculation
+* Core business logic
 
-(Postgres)
+Business logic is tested independently from Flask routes and database implementations.
 
-Tools – password hashing and security utilities
+---
 
-Pytest – unit testing framework
-(frontend)(dockeretc)
+## Technology Stack
 
-🌐 API Overview
+### Backend
 
-Authentication
-POST /auth/login
-POST /auth/logout
+* Python 3
+* Flask
+* Flask-SQLAlchemy
+* PostgreSQL
+* Gunicorn
+* Flask-CORS
+* Werkzeug
 
-Users
-POST /users                     # register a new user
+### Frontend
 
-Lessons
-GET    /users/<username>/lessons
-POST   /users/<username>/lessons
-DELETE /users/<username>/lessons/<lesson_name>
+* HTML5
+* CSS
+* Vanilla JavaScript 
 
-Vocabulary
-GET    /users/<username>/lessons/<lesson_name>/vocab
-POST   /users/<username>/lessons/<lesson_name>/vocab
-DELETE /users/<username>/lessons/<lesson_name>/vocab/<word_foreign>
+### Testing
 
-Learning & Statistics
-POST /vocab/answer
-GET  /users/<username>/stats
+* Pytest
 
-(missing)
+### Deployment
 
-🔐 Authentication & Security
+* Docker
+* Docker Compose
+* Render
+* PostgreSQL (Render Database)
+
+---
+
+## API Overview
+
+### Authentication
+
+```http
+POST /api/auth/login
+POST /api/auth/logout
+GET  /api/me
+```
+
+### Users
+
+```http
+POST /api/users
+```
+
+### Lessons
+
+```http
+GET    /api/users/<username>/lessons
+POST   /api/users/<username>/lessons
+DELETE /api/users/<username>/lessons/<lesson_name>
+```
+
+### Vocabulary
+
+```http
+GET    /api/users/<username>/lessons/<lesson_name>/vocab
+POST   /api/users/<username>/lessons/<lesson_name>/vocab
+DELETE /api/users/<username>/lessons/<lesson_name>/vocab/<word_foreign>
+```
+
+### Learning & Statistics
+
+```http
+POST /api/vocab/answer
+GET  /api/users/<username>/stats
+```
+
+---
+
+## Authentication
 
 Authentication is implemented using Flask sessions.
 
-Users authenticate via username and password
+* Users authenticate with username and password
+* Passwords are securely hashed using Werkzeug
+* Successful login creates a server-side session
+* Session cookies are used for authenticated requests
 
-Passwords are securely hashed using Werkzeug
+---
 
-After a successful login, the user ID is stored in the session
+## Running Locally
 
-Write operations (POST / DELETE) require an active session
+Before running the application locally, make sure that the frontend configuration points to the local backend instead of the deployed Render backend.
 
-Read-only operations (GET) are publicly accessible by design
+Start the application using Docker:
 
-🧪 Testing
-
-Core business logic is covered by unit tests using Pytest.
-
-Tested components include:
-
-Learning phase calculation logic
-
-Vocabulary statistics aggregation
-
-The business logic is tested independently from Flask routes and the database layer to ensure correctness and maintainability.
+```bash
+docker-compose up --build
+```
