@@ -31,7 +31,6 @@ This limitation is caused by the free hosting tier and is not related to the app
 * Docker Containerization
 * Full-Stack Deployment
 * Unit Testing
-* CRUD Operations
 
 ---
 
