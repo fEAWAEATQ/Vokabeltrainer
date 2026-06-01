@@ -11,7 +11,7 @@ const addLessonForm = document.getElementById('add-lesson-form');
 if (addLessonForm) {
 addLessonForm.addEventListener("submit", handleAddLesson);
 }
-loadLessons();
+await loadLessons();
 }
 /*add a lesson to the backend and calls loadLessons
 */
