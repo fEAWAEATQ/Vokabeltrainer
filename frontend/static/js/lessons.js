@@ -17,11 +17,11 @@ loadLessons();
 /*add a lesson to the backend and calls loadLessons
 */
 async function handleAddLesson(e) {
+e.preventDefault();
 const user= await checkAuth();
 console.log("User:", user);
 if(!user)return;
 const username=user.username;
-e.preventDefault();
 const newLesson=document.getElementById("lesson-name").value;
 console.log("Fetch startet");
 const response= await fetch (`${API_BASE_URL}/api/users/${username}/lessons`,{
