@@ -19,7 +19,7 @@ if (startpracticing) {
 }
 const clearListForm = document.getElementById('clear-lesson');
 if (clearListForm) {
- clearListForm.addEventListener("click", () => {
+ clearListForm.addEventListener("click", (event) => {
   event.preventDefault();
         clearPracticeList();
     });

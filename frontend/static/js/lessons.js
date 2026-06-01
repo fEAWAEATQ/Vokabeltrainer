@@ -10,8 +10,9 @@ export function initLessons() {
 const addLessonForm = document.getElementById('add-lesson-form');
 if (addLessonForm) {
 addLessonForm.addEventListener("submit", handleAddLesson);
+console.log("Klick erkannt");
 }
-await loadLessons();
+loadLessons();
 }
 /*add a lesson to the backend and calls loadLessons
 */
@@ -22,6 +23,7 @@ if(!user)return;
 const username=user.username;
 e.preventDefault();
 const newLesson=document.getElementById("lesson-name").value;
+console.log("Fetch startet");
 const response= await fetch (`${API_BASE_URL}/api/users/${username}/lessons`,{
     method:"POST",
     headers: { "Content-Type": "application/json" },
@@ -43,11 +45,13 @@ alert("error adding lesson");
  */
 async function loadLessons() {
     const user= await checkAuth();
+    console.log("Userload:", user);
     if(!user)return;
 const username=user.username;
 const response= await fetch (`${API_BASE_URL}/api/users/${username}/lessons`,{
     credentials:"include"
 });
+console.log("Status:", response.status);
 if(!response.ok){
 console.error("Failed to load lessons");
     return;
