@@ -17,6 +17,7 @@ loadLessons();
 */
 async function handleAddLesson(e) {
 const user= await checkAuth();
+console.log("User:", user);
 if(!user)return;
 const username=user.username;
 e.preventDefault();
