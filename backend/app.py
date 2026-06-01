@@ -19,6 +19,37 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 app.register_blueprint(auth_routes, url_prefix="/api/auth")#Registration of auth routes blueprint
 app.register_blueprint(vocab_routes, url_prefix="/api")#Registration of vocab routes blueprint
+app.register_blueprint(auth_routes, url_prefix="/api/auth")
+app.register_blueprint(vocab_routes, url_prefix="/api")
+
+#A small info page 
+@app.route("/")
+def home():
+    return """
+    <html>
+    <head>
+        <title>Vokabeltrainer Backend</title>
+    </head>
+    <body>
+        <h1>Vokabeltrainer Backend</h1>
+
+        <p>
+            This service provides the REST API for the Vokabeltrainer application.
+        </p>
+
+        <p>
+            Frontend:
+            <a href="https://vokabeltrainer-jcr8.onrender.com">
+                Open Vokabeltrainer
+            </a>
+        </p>
+
+        <p>
+            The backend is hosted on Render's free tier and may require a short startup time after periods of inactivity.
+        </p>
+    </body>
+    </html>
+    """
 def create_test_user():
     if not User.query.filter_by(username="test").first():
         user = User(
