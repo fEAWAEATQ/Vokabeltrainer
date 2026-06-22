@@ -155,10 +155,3 @@ Authentication is implemented using Flask sessions.
 * Session cookies are used for authenticated requests
 
 ---
-
-
-Start the application using Docker:
-
-```bash
-docker-compose up --build
-```
