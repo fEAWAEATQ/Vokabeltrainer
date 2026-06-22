@@ -6,21 +6,7 @@ Primary focus of the project was backend development, API design, authentication
 The application allows users to manage lessons and vocabulary, practice words using a learning-phase system, and track learning statistics.
 
 ## Live Demo
-
-Frontend:
-https://vokabeltrainer-jcr8.onrender.com
-
-Backend:
-https://vokabeltrainer-backend.onrender.com
-
-### Important Note
-
-The application is hosted on Render's free tier.
-
-After longer periods of inactivity, the backend service may enter sleep mode. Before using the application, open the backend URL once and wait until the service has fully started. Afterwards, the frontend can be used normally.
-
-This limitation is caused by the free hosting tier and is not related to the application itself.
-
+http://167.233.69.139:8081/
 ---
 
 ## Key Concepts
@@ -114,7 +100,7 @@ Business logic is tested independently from Flask routes and database implementa
 * Docker
 * Docker Compose
 * Render
-* PostgreSQL (Render Database)
+* PostgreSQL 
 
 ---
 
@@ -170,9 +156,6 @@ Authentication is implemented using Flask sessions.
 
 ---
 
-## Running Locally
-
-Before running the application locally, make sure that the frontend configuration points to the local backend instead of the deployed Render backend.
 
 Start the application using Docker:
 
